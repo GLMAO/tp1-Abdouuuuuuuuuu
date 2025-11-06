@@ -1,20 +1,39 @@
 package org.emp.gl.core.launcher;
 
-import org.emp.gl.clients.Horloge ;
+import org.emp.gl.clients.Horloge;
+import org.emp.gl.clients.HorlogeGUI;
+import org.emp.gl.time.service.impl.DummyTimeServiceImpl;
+import org.emp.gl.timer.service.TimerService;
+
+import javax.swing.SwingUtilities;
 
 /**
- * Hello world!
- *
+ * Main application launcher
  */
 public class App {
 
     public static void main(String[] args) {
-
-        testDuTimeService();
-    }
-
-    private static void testDuTimeService() {
-        Horloge horloge = new Horloge("Num 1") ;
+        // Create timer service instance (singleton-like)
+        TimerService timerService = new DummyTimeServiceImpl();
+        
+        // Create console horloge
+        Horloge consoleHorloge = new Horloge("Console Horloge", timerService);
+        // Display initial time
+        consoleHorloge.afficherHeure();
+        
+        // Create and show GUI horloge
+        SwingUtilities.invokeLater(() -> {
+            HorlogeGUI guiHorloge = new HorlogeGUI("Horloge GUI", timerService);
+            guiHorloge.showWindow();
+        });
+        
+        // Keep the application running - the GUI will keep it alive
+        // This thread can sleep as GUI runs on EDT
+        try {
+            Thread.sleep(Long.MAX_VALUE);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public static void clearScreen() {

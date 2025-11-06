@@ -59,14 +59,14 @@ public class DummyTimeServiceImpl
 
     @Override
     public void addTimeChangeListener(TimerChangeListener pl) {
-        // TODO
-        listeners.add(pl) ;
+        if (pl != null && !listeners.contains(pl)) {
+            listeners.add(pl);
+        }
     }
 
     @Override
     public void removeTimeChangeListener(TimerChangeListener pl) {
-        // TODO
-        listeners.remove(pl) ;
+        listeners.remove(pl);
     }
 
     private void timeChanged() {
@@ -124,7 +124,7 @@ public class DummyTimeServiceImpl
     private void minutesChanged(int oldValue, int minutes) {
        for (TimerChangeListener l : listeners) {
            l.propertyChange(TimerChangeListener.MINUTE_PROP,
-                   oldValue, secondes);
+                   oldValue, minutes);
        }
     }
 
@@ -141,7 +141,7 @@ public class DummyTimeServiceImpl
     private void heuresChanged(int oldValue, int heures) {
        for (TimerChangeListener l : listeners) {
            l.propertyChange(TimerChangeListener.HEURE_PROP,
-                   oldValue, secondes);
+                   oldValue, heures);
        }
     }
 
